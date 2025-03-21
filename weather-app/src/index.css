@@ -1,0 +1,147 @@
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.outer-container{
+
+  background: url("https://images.unsplash.com/photo-1617194369222-af8a7e682365?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") center;
+  background-size: cover;
+
+}
+
+.main-container{
+  height: 100vh;
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.inner-container{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  align-items: center;
+  border-radius: 15px;
+  width: 60vw;
+  max-width: 430px;
+  height: 80vh;
+  /* background: rgba(255, 255, 255, 0.547); */
+  background:transparent;
+  border: 3px solid rgb(226, 225, 225);
+  /* box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3); */
+  background: rgba(67, 65, 65, 0.141);
+  padding: 2rem 0.5rem;
+  color: white;
+}
+.search-input{
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  background-color:white;
+  padding: 0.5rem 1rem;
+  max-width: 380px;
+  min-width: 200px;
+  width: 50%;
+}
+.search-input input {
+  padding: 0.5rem 1rem;
+  border: none;
+}
+.search-input input:focus {
+ outline: none;
+}
+.search-input i{
+  color: rgba(117, 115, 115, 0.773);
+}
+
+.font-change{
+   font-size: 20px;
+   font-weight: 600;text-align: center;
+}
+.weather-grid{
+  height: 60%;
+  width: 80%;
+  display: grid;
+  row-gap: 1rem;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  padding:  1rem;
+}
+.div-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.city-name{
+  font-size: 30px;
+  font-weight: 600;
+ 
+}
+.city-name i{
+  color: white;
+  font-size: 28px;
+}
+
+.temp-container{
+  font-size: 20px;
+  font-weight: 600;
+  align-self: center;
+  text-align: center;
+}
+.temp-val{
+  font-size: 39px;
+  font-weight: 700;
+}
+.weather-img{
+  height: 9rem;
+  position: relative;
+  left: -1rem;
+}
+.small-img{
+  height: 3.2rem;
+  width: 2.7rem;
+  color: white;
+}
+.md-text{
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.extra-content{
+  display: flex;
+  gap: 0.5rem;
+}
+
+
+
+
+
+
+
+
+@media (max-width: 768px) {
+  .inner-container{
+      width: 80%;
+      height: 80%;
+    }
+}
+@media (max-width: 575px) {
+  .inner-container{
+      width: 80%;
+      height: 80%;
+    }
+}
+@media (max-width: 480px) {
+  .inner-container{
+      width: 90%;
+      height: 90%;
+  }
+}
+@media (max-width: 320px) {
+  .inner-container{
+      width: 95%;
+      height: 95%;
+  }
+}
