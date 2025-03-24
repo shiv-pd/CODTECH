@@ -11,28 +11,33 @@ function App() {
   const [isShowingBSites , setIsShowingBSites] = useState(false);
 
   useEffect(() => {
-    chrome.storage.sync.get("blockSites", (data) => {
-      if (!data.blockSites || data.blockSites.length === 0) {
+    chrome.storage.sync.get(["blockSites", "isFirstInstall"], (data) => {
+      if (data.isFirstInstall) {
         setIsFirstInstall(true);
-
-        chrome.storage.sync.set({blockSites: []}, ()=> {
-          console.log("blocked sites cleared!!!!!!!!!");
-          
-        })
-      } else {
+        chrome.storage.sync.set({isFirstInstall: false})
+      } 
+      if(data.blockSites){
         setBlockSites(data.blockSites);
+      }else {
+        chrome.storage.sync.set({ blockSites: [] });
       }
     });
   }, []);
 
+  // const showDailyReport = () => {
+  //   let date = Date().now;
+
+  // }
+
   const saveBlockSites = () => {
     console.log("saving blocked sites....");
-
     const updatedSitesArray = inputValue.split(",").map((site) => site.trim());
-
-    chrome.storage.sync.get("blockSites", (data) => {
-      const existingBlockSites = data.blockSites || [];
-
+    chrome.storage.sync.get(["blockSites", "isFirstInstall"], (data) => {
+      if(data.isFirstInstall) {
+        data.blockSites = [];
+      }
+      const existingBlockSites = data.blockSites ;
+      console.log(existingBlockSites);
       const newSitesArray = [
         ...new Set([...existingBlockSites, ...updatedSitesArray]),
       ];
@@ -40,8 +45,13 @@ function App() {
       chrome.storage.sync.set({ blockSites: newSitesArray }, () => {
         alert("blocked sites saaved! happy productivity!!");
         setBlockSites(newSitesArray);
-        setIsFirstInstall(false);
-        setIsUpdating(false);
+        
+        if(isFirstInstall) {
+          setIsFirstInstall(false);
+        }
+        if(isUpdating){
+          setIsUpdating(false);
+        }
         setIsShowingBSites(true);
       });
     });
@@ -50,7 +60,7 @@ function App() {
 
   const updateBlockSites = () => {
     console.log("updating sites....");
-    setIsUpdating(true);  //React detects the state change in isUpdating, and it automatically re-renders the component 
+    setIsUpdating(true);  
   };
 
   return (
@@ -85,6 +95,7 @@ function App() {
           <div>
             <h3 style={{ width: "15rem", marginBottom: "2rem" }}>Stay focused! 🚀</h3>
             <button onClick={updateBlockSites}>Update Distracting websites</button>
+            {/* <button onClick={showDailyReport}>Daily report</button> */}
           </div>
         
          )}
