@@ -1,0 +1,32 @@
+{
+    "manifest_version": 3,
+    "name": "Time Tracker",
+    "version": "1.0",
+    "description": "Tracks time on websites and blocks distractions.",
+    "permissions": ["storage", "tabs", "scripting", "alarms"],
+    "host_permissions": ["<all_urls>"],
+"background": {
+    "service_worker": "background.js",
+     "type": "module"
+  },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ],
+    "icons": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+  },
+  "action": {
+      "default_popup": "index.html",
+      "default_icon": {
+          "16": "icon.png",
+          "48": "icon.png",
+          "128": "icon.png"
+      }
+  }
+  }
+  
