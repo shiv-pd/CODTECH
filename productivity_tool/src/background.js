@@ -1,9 +1,10 @@
 console.log(" Background script started!");
 
-chrome.runtime.onInstalled.addListener((details) => {
+chrome.runtime.onInstalled.addListener( (details) => {
   console.log("Extension installed.");
+
   if (details.reason === "install") {
-    chrome.storage.sync.set({ blockSites: [], isFirstInstall: true }, () => {
+  chrome.storage.sync.set({ blockSites: [], isFirstInstall: true }, () => {
       console.log("first install detected");
     });
   }
@@ -20,15 +21,15 @@ chrome.storage.sync.get(["siteTimes"], (data) => {
   }
 });
 
-function updateTimeSpent(activeSite) {
+ function updateTimeSpent(activeSite) {
   if (activeSite && startTime) {
     let timeSpent = Date.now() - startTime;
 
-    chrome.storage.sync.get(["siteTimes"], (data) => {
+     chrome.storage.sync.get(["siteTimes"], (data) => {
       let updatedTimes = data.siteTimes || {};
       updatedTimes[activeSite] = (updatedTimes[activeSite] || 0) + timeSpent;
 
-      chrome.storage.sync.set({ siteTimes: updatedTimes }, () => {
+       chrome.storage.sync.set({ siteTimes: updatedTimes }, () => {
         console.log(`tracked ${updatedTimes[activeSite] / 1000} seconds on ${activeSite}`);
       });
     });
@@ -52,22 +53,17 @@ function trackActiveTab(tabId) {
 }
 
 const checkForDistractingWebsite = (tab) => {
-  console.log("Function called!");
+  console.log(" checkForDistractingWebsite Function called!");
   if (!tab.url) return;
 
-  chrome.storage.sync.get(["blockSites", "isFirstInstall"], (data) => {
-    if (data.isFirstInstall) {
-      data.blockSites = [];
-    }
+ chrome.storage.sync.get(["blockSites", "isFirstInstall"], (data) => {
+   
 
     let tabUrl = new URL(tab.url).hostname;
     console.log(` Checking site: ${tabUrl}`);
     console.log(" Current block list:", data.blockSites);
 
-    if (
-      data.blockSites &&
-      data.blockSites.some((site) => tabUrl.includes(site))
-    ) {
+    if (data.blockSites &&  data.blockSites.some((site) => tabUrl.includes(site)) ) {
       console.log(` Blocking: ${tabUrl}`);
       chrome.scripting.executeScript({
         target: { tabId: tab.id },
@@ -82,11 +78,11 @@ const checkForDistractingWebsite = (tab) => {
 chrome.tabs.onActivated.addListener((activeInfo) => {
   console.log(" Tab switched: ", activeInfo);
 
-  chrome.tabs.get(activeInfo.tabId, (tab) => {
-    if (tab && tab.url) {
-      checkForDistractingWebsite(tab);
-    }
-  });
+  // chrome.tabs.get(activeInfo.tabId, (tab) => {
+  //   if (tab && tab.url) {
+  //     checkForDistractingWebsite(tab);
+  //   }
+  // });
 
   trackActiveTab(activeInfo.tabId);
 });
@@ -103,18 +99,18 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
 chrome.tabs.onRemoved.addListener((tabId) => {
   if (tabId === activeTabId) {
-    updateTimeSpent();
+    updateTimeSpent(activeSite);
     activeTabId = null;
     activeSite = null;
     startTime = null;
   }
 });
 
-chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-  if (tabs.length > 0) {
-    trackActiveTab(tabs[0].id);
-  }
-});
+// chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+//   if (tabs.length > 0) {
+//     trackActiveTab(tabs[0].id);
+//   }
+// });
 
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area === "sync" && changes.blockSites) {
@@ -122,15 +118,9 @@ chrome.storage.onChanged.addListener((changes, area) => {
   }
 });
 
-chrome.runtime.onSuspend.addListener(() => {
-  chrome.storage.sync.remove("siteTimes", () => {
-    console.log(
-      " Cleared site tracking data on suspend, but kept blocked sites."
-    );
-  });
-});
 
-chrome.runtime.setUninstallURL("https://example.com/uninstalled", () => {
-  chrome.storage.sync.clear(() => console.log(" Cleared on Uninstall"));
-  chrome.storage.local.clear(() => console.log(" Local storage cleared"));
-});
+
+// chrome.runtime.setUninstallURL("https://example.com/uninstalled", () => {
+//   chrome.storage.sync.clear(() => console.log(" Cleared on Uninstall"));
+//   chrome.storage.local.clear(() => console.log(" Local storage cleared"));
+// });
